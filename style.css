@@ -1,16 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Allura&family=Audiowide&family=Delicious+Handrawn&family=Indie+Flower&family=Orbitron:wght@400..900&family=Saira+Stencil+One&family=Shadows+Into+Light+Two&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&family=Silkscreen:wght@400;700&family=Sriracha&family=Tangerine:wght@400;700&family=The+Girl+Next+Door&display=swap');
 :root  {
-    --easy: #a9fbd79c;
-    --medium: #fedc979c;
-    --hard: #e396969c;
+    --highlight-mask: linear-gradient(to right bottom, #ff4444, #44ff44, #4444ff);
+
+    --easy-bg: linear-gradient(to right bottom, #44aa44, #44aaef);
+    --medium-bg: linear-gradient(to right bottom, #aaaa00, #aa8200);
+    --hard-bg: linear-gradient(to right bottom, #aa4444, #aa44ef);
+
+    --black: rgb(20, 20, 20);
+    --window-color: #111111;
+    --white: #FFFFFF;
+
+    --orbitron: "Orbitron", sans-serif;
 }
 
 body {
     padding: 8px;
-    font-family: "Orbitron", sans-serif;
-    background: linear-gradient(to right bottom, 
-    #FFCCCC, #adffad, #adadff);
-    color: rgb(20, 20, 20);
+    font-family: var(--orbitron);
+    background-color: var(--black);
+    color: var(--white);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: "title title"
+    "rules levels";
+}
+
+#title-game {
+    grid-area: title;
+}
+
+#rules {
+    grid-area: rules;
 }
 
 * {
@@ -19,19 +38,18 @@ body {
 
 h1 {
     text-align: center;
-    text-decoration: underline wavy #000 1px;
+    font-size: 3rem;
 }
 
-h2 {
-    text-decoration: underline wavy #000 1px;
+#rules h2 {
+    font-size: 2rem;
+}
+#rules p {
+    font-size: 1.2rem
 }
 
 #help {
     text-align: center;
-}
-
-#seconds {
-    text-decoration: underline wavy #000 1px;
 }
 
 .helpColor:hover {
@@ -40,20 +58,60 @@ h2 {
 
 .instructions {
     text-decoration-thickness: 1px;
-    text-decoration-line: underline;
-    text-decoration-style: dashed;
     font-weight: 800;
+    background-image: var(--highlight-mask);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+
+}
+
+#window {
+    width: fit-content;
+    height: fit-content;
+
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    align-items: center;
+
+    background-color: var(--window-color);
+    border: var(--white) 0.2rem solid;
+
+    box-shadow: #7e7e7e 0 0 100vh;
+}
+
+#countdown button {
+    width: fit-content;
+    height: fit-content;
+    padding: 2px;
+    font-size: 1rem;
+    font-family: var(--orbitron);
+
+    background-color: var(--window-color);
+
+    background-image: var(--highlight-mask);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .container {
     display: flex;
+    height: fit-content;
+    width: 100vh;
+    justify-content: center;
 }
 .sub {
     flex: 1;
+    width: fit-content;
+    height: fit-content;
 }
 .colorTiles {
     flex: 1;
-    height: 50%;
+    height: 50px;
 }
 .colorTiles:hover {
     transform: scale(110%);
@@ -64,36 +122,76 @@ h2 {
     transform: none;
 }
 
-.button-level {
+#button-level {
+    grid-area: levels;
+
     align-items: center;
     text-align: center;
+
+    /* display: flex; */
+    flex-wrap: wrap;
+    justify-content: center;
 }
+
+#button-level button {
+    width: 15%;
+}
+
 button {
     font-family: "Silkscreen", serif;
     font-weight: 400;
     font-size: 2rem;
 
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 28px;
-    padding-right: 28px;
-    border-radius: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 4px;
 
     cursor: pointer;
     transition: ease-in 150ms;
 
-    margin: 0 0.5rem;
+    margin: 1rem 0.5rem 0;
+    color: var(--white);
+}
+
+button:hover {
+    transform: scale(105%);
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+button:disabled:hover {
+    transform: none;
 }
 
 .easy {
-    background-color: var(--easy);
+    background-image: var(--easy-bg);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     
 }
 
 .medium {
-    background-color: var(--medium);
+    background-image: var(--medium-bg) ;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.hard { 
-    background-color: var(--hard);
+.hard {
+    background-image: var(--hard-bg);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#coming-soon {
+    font-size: 1rem;
+    background-color: var(--window-color);
+    
+    background-image: var(--highlight-mask);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }
