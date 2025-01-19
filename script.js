@@ -6,7 +6,7 @@ let playing = false
 // ----------------------- * ----------------------- //
 
 function isCompleted () {
-    let listColorTiles = document.querySelectorAll(".colorTiles") // C'est trop ma vie
+    let listColorTiles = document.querySelectorAll(".colorTiles")
     let listColorTilesCompleted = []
     
     for (let a of hueAccomplished) {
@@ -63,6 +63,10 @@ function createTile (color, idP, blockedTile = false) {
             }
             if (isCompleted() && playing) {
                 alert("Congratulation you completed this level !")
+                // able the buttons 
+                ableLevelButton()
+                document.getElementById('countdown').innerHTML = `<span class="instructions">Congratulation !</span> <button id='end' onclick='giveUp()'>Close</button>`
+
                 celebrate()
             }
         }
@@ -84,11 +88,10 @@ function displayArrayOfColors (array) {
             }
             if (color != null) {
                 while (color.length < 6) {
-                    color = "0" + color
+                    color = color + "0" 
                 }
                 if (color[6] == "*") {
                     color = color.slice(0, 6)
-                    console.log(color)
                     createTile("#" + color, idParent, true)
                 }
                 else {createTile("#" + color, idParent)}
@@ -176,6 +179,7 @@ function generateGradient (c1, c2, n) {
     let divColorR = Math.round((Math.abs(r1 - r2)) / nbInterColors)
     let divColorG = Math.round((Math.abs(g1 - g2)) / nbInterColors)
     let divColorB = Math.round((Math.abs(b1 - b2)) / nbInterColors)
+    // console.log(`Génère cI entre ${c1} et ${c2} \nDiv suivants: divR ${divColorR}\ndivG ${divColorG}\ndivB ${divColorB}`)
 
     // Boucle pour générer les couleurs intermédiaires
     for (let i=0; i<nbInterColors; i++) {
@@ -191,19 +195,31 @@ function generateGradient (c1, c2, n) {
         if (b1 <= b2) {b = decimalToHex(b1 + i*divColorB)}
         else {b = decimalToHex(b1 - i*divColorB)}
 
+        // console.log(`rgb(${r}, ${g}, ${b})`)
         if (r === "") {
             r = "00"
         }
+        else if (r.length == 1) {
+            r = "0" + r
+        }
+
         if (g === "") {
             g = "00"
         }
+        else if (g.length == 1) {
+            g = "0" + g
+        }
+
         if (b === "") {
             b = "00"
+        }
+        else if (b.length == 1) {
+            b = "0" + b
         }
 
         let nextColor = r + g + b
         while (nextColor.length < 6) {
-            nextColor = "0" + nextColor
+            nextColor = nextColor + "0"
         }
         interColors.push(nextColor)
     }
@@ -271,6 +287,7 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
     for (let index in arrayColors) {
         arrayColors[index] = generateGradient(arrayColors[index][0], arrayColors[index][ arrayColors[index].length -1], len)
     }
+    // console.log(arrayColors)
     return arrayColors
 }
 
@@ -279,7 +296,6 @@ function shuffleArray (h) {
     for (o of h) {
         hue.push([...o])
     }
-    console.log(hue)
 
     let len = hue[0].length
 
@@ -287,7 +303,6 @@ function shuffleArray (h) {
     for (let a of hue) {
         list += a
         list += "," // Pour séparer les listes entre elles lors de la concaténation
-        console.log(list)
     }
     
     list = list.split(",") // On a fusionné toutes les listes en une big liste
@@ -301,8 +316,6 @@ function shuffleArray (h) {
     let c2 = h[0][h[0].length -1]
     let c3 = h[h.length -1][0]
     let c4 = h[h.length -1][h[h.length -1].length -1]
-    console.log([hue.indexOf(c1), hue.indexOf(c2), hue.indexOf(c3), hue.indexOf(c4)])
-    // console.log
     for (let k of [hue.indexOf(c1), hue.indexOf(c2), hue.indexOf(c3), hue.indexOf(c4)] ) { 
         let copy = list[list.indexOf(hue[k])] // Une variable temporaire qui contient les couleurs des quatres coins
         list[list.indexOf(hue[k])] = list[k]
@@ -316,27 +329,88 @@ function shuffleArray (h) {
         }
     }
 
-    console.log(hue)
-    console.log(temp)
     return temp
 }
 // ----------------------- JEU ----------------------- //
 let interval
 let timeout
+const LEVELS = {
+    "1": {
+        "colors": ["FF0000", "0000FF", "00FF00", "000000"],
+        "difficulty": "easy"
+    }, 
+    "2": {
+        "colors": ["358600", "75F6FF", "8377D1", "FFFFFF"],
+        "difficulty": "medium"
+    },
+    "3": {
+        "colors": ["247BA0", "C3B299", "596F43", "50514F"],
+        "difficulty": "medium"
+    }, 
+    "4": {
+        "colors": ["B39C4D", "34623F", "9A6D38", "CC3F0C"],
+        "difficulty": "hard"
+    },
+    "5": {
+        "colors": ["373D20", "717744", "BCBD8B", "766153"],
+        "difficulty": "hard"
+    },
+    "6": {
+        "colors": ["FFA600", "000000", "FFFFFF", "0000A5"],
+        "difficulty": "easy"
+    },
+    "7": {
+        "colors": ["0059FF", "FFEF00", "08A04B", "E41B17"],
+        "difficulty": "medium"
+    },
+    "8": {
+        "colors": ["7D0552", "FDEEF4", "EB5406", "36013F"],
+        "difficulty": "medium"
+    },
+    "9": {
+        "colors": ["98FF98", "E42217", "967BB6", "848B79"],
+        "difficulty": "hard"
+    },
+    "10": {
+        "colors": ["FD1C03", "00CED1", "1569C7", "E78A61"],
+        "difficulty": "hard"
+    },
+}
+let levelMap = document.getElementById("button-level")
+function createLevelMap () {
+    let i = 0
+    for (let key in LEVELS) {
+        let buttonLevel = document.createElement("button")
+        
+        buttonLevel.classList.add(LEVELS[key].difficulty)
+        buttonLevel.classList.add("level")
+        buttonLevel.innerText = key
+        buttonLevel.onclick = () => {
+            play(key)
+        }
+        levelMap.appendChild(buttonLevel)
+        i++
+    }
+    let buttonLevel = document.createElement("button")
+    buttonLevel.id = "coming-soon"
+    buttonLevel.innerText = "More level coming soon..."
+    buttonLevel.disabled = true
+    levelMap.appendChild(buttonLevel)
+}
+
+createLevelMap()
+
+// Créer les boutons de niveaux
 
 function play(level="1") {
+    document.getElementById("window").style.display = ""
+    disableLevelButton()
+
     clearInterval(interval)
     clearTimeout(timeout)
 
     let canva = document.getElementById("canva")
     canva.innerHTML = ""
-    const LEVELS = {
-        "1": ["FF0000", "0000FF", "00FF00", "000000"], 
-        "2": ["358600", "75F6FF", "8377D1", "FFFFFF"],
-        "3": ["247BA0", "C3B299", "596F43", "50514F"], 
-        "4": ["B39C4D", "34623F", "9A6D38", "CC3F0C"],
-        "5": ["373D20", "717744", "BCBD8B", "766153"]
-    }
 
     // Compte à rebours
     document.getElementById("seconds").innerHTML = `8 seconds`
@@ -349,7 +423,7 @@ function play(level="1") {
         document.getElementById("seconds").innerHTML = `${temps} seconds`
     }, 990 )
 
-    hueAccomplished = generateArrayOfColors(LEVELS[level][0], LEVELS[level][1], LEVELS[level][2], LEVELS[level][3], 1)
+    hueAccomplished = generateArrayOfColors(LEVELS[level]["colors"][0], LEVELS[level]["colors"][1], LEVELS[level]["colors"][2], LEVELS[level]["colors"][3], 1)
 
     let hue = []
     for (let a=0; a<hueAccomplished.length ; a++) {
@@ -365,11 +439,34 @@ function play(level="1") {
         displayArrayOfColors(hue)
         playing = true
         selectedTiles = {"selection": null}
-    }, 8000)     ///////// ICI LE COUNTDOWN
+        document.getElementById('countdown').innerHTML = "The scene is yours, switch the tiles ! <button id='end' onclick='giveUp()'>Give Up ?</button>"
+    }, 8000) // ICI LE COUNTDOWN
 }
+
+function giveUp() {
+    clearInterval(interval)
+    clearTimeout(timeout)
+
+    document.getElementById(`window`).style.display = `none`
+    document.getElementById('countdown').innerHTML = `You have only <span class="instructions" id="seconds">8 seconds</span> to memorize the pattern <button id='end' onclick='giveUp()'>Give Up ?</button>`
+    ableLevelButton()
+}
+
+function disableLevelButton() {
+    for (bal of document.querySelectorAll(".level")) {
+        bal.disabled = true
+    }
+}
+
+function ableLevelButton() {
+    for (bal of document.querySelectorAll(".level")) {
+        bal.disabled = false
+    }
+}
+
 // ----------------------- CSS ----------------------- //
 
 function celebrate () {
     console.log("Well done !")
-    // comming next update !
+    // comming soon !
 }
