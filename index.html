@@ -10,33 +10,31 @@
     </head>
 </head>
 <body>
-    <h1>Play Spectrum !</h1>
-    <h2>Spectrum: a game concept... </h2>
-    <p>How do you feel when colors match perfectly on a beautiful gradient ? 
-        In this this game you must recreate a gradient by moving tiles until everything looks great !
-        Follow your inner voice and you will build a masterpiece !
-    </p>
-    <p>You need to <u class="instructions">move</u> the color tiles to <u class="instructions">recreate the spectrum</u>, you can move 
-        <u class="instructions">the tiles by clicking on the first tile you want to move and the tile to exchange spot with</u>
-        and once you are done a message should appear if you <u class="instructions">completed</u> this puzzle !</p>
-    <hr>
-    <p id="help">-
-        <br>
-        You have only <span id="seconds">8 seconds</span> to memorize the pattern, if you are ready, 
-        click a button to choose a level.
-        <br>
-        -
-    </p>
-    <div class="button-level">
-        <button onclick="play('1')" class="easy">1</button>
-        <button onclick="play('2')" class="medium">2</button>
-        <button onclick="play('3')" class="medium">3</button>
-        <button onclick="play('4')" class="hard">4</button>
-        <button onclick="play('5')" class="hard">5</button>
+    <h1 id="title-game">Play <span class="instructions">Spectrum</span> !</h1>
+    
+    <div id="rules">
+        <h2><span class="instructions">Spectrum</span>: a game concept... </h2>
+        <p>How do you feel when colors <span class="instructions">match perfectly</span> on a beautiful gradient ? 
+            In this this game you must recreate a <span class="instructions">gradient</span> by moving tiles until everything looks great !
+            Follow your <span class="instructions">inner voice</span> and you will build a masterpiece !
+        </p>
+        <p>You need to <span class="instructions">move</span> the color tiles to <span class="instructions">recreate the spectrum</span>, you can move 
+            <span class="instructions">the tiles by clicking on the first tile you want to move and the tile to exchange spot with</span>
+            and once you are done a message should appear if you <span class="instructions">completed</span> the puzzle !</p>
+        <hr>
+        <p id="help">
+            <br>
+            <span class="instructions">Click</span> a button to choose a <span class="instructions">level
+        </p>
     </div>
-    <hr>
 
-    <div class="container" id="canva"></div>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div id="button-level"></div>
+
+    <div id="window" style="display: none;">
+        <div id="header-level">
+            <p id="countdown">You have only <span class="instructions" id="seconds">8 seconds</span> to memorize the pattern <button id='end' onclick='giveUp()'>Give Up ?</button></p>
+        </div>
+        <div class="container" id="canva"></div>
+    </div>
     <script src="script.js"></script>
 </body>
