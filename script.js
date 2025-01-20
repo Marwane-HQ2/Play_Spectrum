@@ -8,8 +8,18 @@ let playing = false
 function isCompleted () {
     let listColorTiles = document.querySelectorAll(".colorTiles")
     let listColorTilesCompleted = []
-    
+    let z = true
+
     for (let a of hueAccomplished) {
+        listColorTilesCompleted = listColorTilesCompleted.concat(a)
+    }
+    for (let e=0; e<listColorTiles.length; e++) {
+        if (listColorTiles[e].id != "#" + listColorTilesCompleted[e]) {
+            z = false
+        }        
+    }
+    
+    for (let a of customHueAccomplished) {
         listColorTilesCompleted = listColorTilesCompleted.concat(a)
     }
     for (let e=0; e<listColorTiles.length; e++) {
@@ -17,7 +27,7 @@ function isCompleted () {
             return false
         }        
     }
-    return true
+    return z || true
 
 }
 
@@ -179,12 +189,10 @@ function generateGradient (c1, c2, n) {
     let divColorR = Math.round((Math.abs(r1 - r2)) / nbInterColors)
     let divColorG = Math.round((Math.abs(g1 - g2)) / nbInterColors)
     let divColorB = Math.round((Math.abs(b1 - b2)) / nbInterColors)
-    // console.log(`Génère cI entre ${c1} et ${c2} \nDiv suivants: divR ${divColorR}\ndivG ${divColorG}\ndivB ${divColorB}`)
-
     // Boucle pour générer les couleurs intermédiaires
     for (let i=0; i<nbInterColors; i++) {
         let r
-        if (r1 <= r2) {r = decimalToHex(r1 + i*divColorR)}
+        if (r1 <= r2) {r = decimalToHex(r1 + i*divColorR)}  
         else {r = decimalToHex(r1 - i*divColorR)}
 
         let g
@@ -195,7 +203,6 @@ function generateGradient (c1, c2, n) {
         if (b1 <= b2) {b = decimalToHex(b1 + i*divColorB)}
         else {b = decimalToHex(b1 - i*divColorB)}
 
-        // console.log(`rgb(${r}, ${g}, ${b})`)
         if (r === "") {
             r = "00"
         }
@@ -220,7 +227,7 @@ function generateGradient (c1, c2, n) {
         let nextColor = r + g + b
         while (nextColor.length < 6) {
             nextColor = nextColor + "0"
-        }
+            }
         interColors.push(nextColor)
     }
     interColors.push(color2)
@@ -254,7 +261,7 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
     let color2 = c2
     let color3 = c3
     let color4 = c4
-    let len = l+2 // ICIIIIIIIIIIIIIIIIIIII
+    let len = l+2
 
     let arrayColors = []
 
@@ -266,13 +273,16 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
         arrayColors.push(temp)
     }
 
+
     arrayColors[0][0] = color1
     arrayColors[0][len-1] = color2
     arrayColors[len-1][0] = color3
     arrayColors[len-1][len-1] = color4
     
     arrayColors[0] = generateGradient(arrayColors[0][0], arrayColors[0][len-1], len)
+    
     arrayColors[len-1] = generateGradient(arrayColors[len-1][0], arrayColors[len-1][len-1], len)
+
 
     if (true) { // Colonnes et lignes mutées
         let temp = []
@@ -284,10 +294,11 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
         }
         arrayColors = [...temp]
     }
+
     for (let index in arrayColors) {
         arrayColors[index] = generateGradient(arrayColors[index][0], arrayColors[index][ arrayColors[index].length -1], len)
     }
-    // console.log(arrayColors)
+
     return arrayColors
 }
 
@@ -337,45 +348,57 @@ let timeout
 const LEVELS = {
     "1": {
         "colors": ["FF0000", "0000FF", "00FF00", "000000"],
-        "difficulty": "easy"
+        "difficulty": "easy",
+        "tip": "Green colors can be tricky ! Convert HEX codes to decimal and sort them."
     }, 
     "2": {
         "colors": ["358600", "75F6FF", "8377D1", "FFFFFF"],
-        "difficulty": "medium"
+        "difficulty": "medium",
+        "tip": "Maybe focus on edges and then complete the center."
     },
     "3": {
         "colors": ["247BA0", "C3B299", "596F43", "50514F"],
-        "difficulty": "medium"
+        "difficulty": "medium",
+        "tip": "Center colors are similar so look for similar HEX codes."
     }, 
     "4": {
         "colors": ["B39C4D", "34623F", "9A6D38", "CC3F0C"],
-        "difficulty": "hard"
+        "difficulty": "hard",
+        "tip": "Put green, yellow, brown and orange colors in a distinct way, then sort them."
     },
     "5": {
         "colors": ["373D20", "717744", "BCBD8B", "766153"],
-        "difficulty": "hard"
+        "difficulty": "hard",
+        "tip": "Figure out all alone !"
     },
     "6": {
         "colors": ["FFA600", "000000", "FFFFFF", "0000A5"],
-        "difficulty": "easy"
+        "difficulty": "easy",
+        "tip": "The four colors on the corners have very high contrast, use this to help you"
     },
     "7": {
         "colors": ["0059FF", "FFEF00", "08A04B", "E41B17"],
-        "difficulty": "medium"
+        "difficulty": "medium",
+        "tip": "Focus on first and last column first"
     },
+
     "8": {
         "colors": ["7D0552", "FDEEF4", "EB5406", "36013F"],
-        "difficulty": "medium"
+        "difficulty": "medium",
+        "tip": "Brighter colors are closer to the top right corner"
     },
     "9": {
         "colors": ["98FF98", "E42217", "967BB6", "848B79"],
-        "difficulty": "hard"
+        "difficulty": "hard",
+        "tip": "Use HEX codes to sort colors"
     },
     "10": {
         "colors": ["FD1C03", "00CED1", "1569C7", "E78A61"],
-        "difficulty": "hard"
+        "difficulty": "hard",
+        "tip": "Center colors have their 3 first caracters in common, use this to place them"
     },
 }
+
 let levelMap = document.getElementById("button-level")
 function createLevelMap () {
     let i = 0
@@ -404,6 +427,8 @@ createLevelMap()
 
 function play(level="1") {
     document.getElementById("window").style.display = ""
+    document.getElementById("window").dataset.level = level
+    document.getElementById("tip-button").disabled = true
     disableLevelButton()
 
     clearInterval(interval)
@@ -440,6 +465,10 @@ function play(level="1") {
         playing = true
         selectedTiles = {"selection": null}
         document.getElementById('countdown').innerHTML = "The scene is yours, switch the tiles ! <button id='end' onclick='giveUp()'>Give Up ?</button>"
+        document.getElementById("tip-button").disabled = false
+        document.getElementById("tip-button").onclick = () => {
+            showTip(LEVELS)
+        }
     }, 8000) // ICI LE COUNTDOWN
 }
 
@@ -464,9 +493,139 @@ function ableLevelButton() {
     }
 }
 
+function showTip(levelBase) {
+    let tipDialog = document.getElementById('tip')
+    let tip = levelBase[document.getElementById("window").dataset.level]["tip"]
+    document.getElementById("tip-p").innerHTML = tip
+    tipDialog.showModal()
+}
+
 // ----------------------- CSS ----------------------- //
 
 function celebrate () {
     console.log("Well done !")
     // comming soon !
+}
+
+let c1CodeH = document.getElementById("c1-code")
+let c2CodeH = document.getElementById("c2-code")
+let c3CodeH = document.getElementById("c3-code")
+let c4CodeH = document.getElementById("c4-code")
+
+let c1Input = document.getElementById('c1')
+let c2Input = document.getElementById('c2')
+let c3Input = document.getElementById('c3')
+let c4Input = document.getElementById('c4')
+
+let allColorLists = [
+    [c1CodeH, c1Input],
+    [c2CodeH, c2Input],
+    [c3CodeH, c3Input],
+    [c4CodeH, c4Input]
+]
+
+let levelNameInput = document.getElementById('level-name')
+
+function addColorEventListenner() {
+    for (let a of allColorLists) {
+        a[1].addEventListener('input', () => {
+            a[0].innerHTML = a[1].value
+        })
+        a[1].addEventListener('change', () => {
+            a[0].innerHTML = a[1].value
+        })
+    }
+}
+
+addColorEventListenner()
+
+let LEVEL_USER = {}
+
+function createLevel() {
+    if (levelNameInput.value == "") {
+        alert("Enter a valid name for your level")
+        return
+    }
+    LEVEL_USER[levelNameInput.value] = {
+        "colors": [c1Input.value.slice(1).toUpperCase(), c2Input.value.slice(1).toUpperCase(), c3Input.value.slice(1).toUpperCase(), c4Input.value.slice(1).toUpperCase()],
+        "difficulty" : "custom",
+        "tip": "You created this level ! Enjoy !"
+    }
+    createCustomLevelMap()
+    document.getElementById('create-level-form').style.display = "none"
+    levelNameInput.value = ""
+}
+
+function openCreateLevelWindow() {
+    document.getElementById('create-level-form').style.display = ""
+}
+
+let customLevelMap = document.getElementById("button-custom-levels")
+
+function createCustomLevelMap () {
+    let i = 0
+    customLevelMap.innerHTML = ""
+    for (let key in LEVEL_USER) {
+        let buttonLevel = document.createElement("button")
+        
+        buttonLevel.classList.add(LEVEL_USER[key].difficulty)
+        buttonLevel.classList.add("level")
+        buttonLevel.innerText = key
+        buttonLevel.onclick = () => {
+            playCustom(key)
+        }
+        customLevelMap.appendChild(buttonLevel)
+        i++
+    }
+}
+
+createCustomLevelMap()
+let customHueAccomplished
+
+function playCustom(level) {
+
+    document.getElementById("window").style.display = ""
+    document.getElementById("window").dataset.level = level
+    document.getElementById("tip-button").disabled = true
+    disableLevelButton()
+
+    clearInterval(interval)
+    clearTimeout(timeout)
+
+    let canva = document.getElementById("canva")
+    canva.innerHTML = ""
+
+    // Compte à rebours
+    document.getElementById("seconds").innerHTML = `8 seconds`
+
+    let temps = 8
+    interval = setInterval(() => {
+        temps -= 1
+        if (temps <= 0) {
+            clearInterval(interval)
+        }
+        document.getElementById("seconds").innerHTML = `${temps} seconds`
+    }, 990 )
+
+
+    customHueAccomplished = generateArrayOfColors(LEVEL_USER[level]["colors"][0], LEVEL_USER[level]["colors"][1], LEVEL_USER[level]["colors"][2], LEVEL_USER[level]["colors"][3], 1)
+    let hue = []
+
+    for (let a=0; a<customHueAccomplished.length ; a++) {
+        hue.push([...customHueAccomplished[a]])
+    }
+    hue = shuffleArray(hue)
+    playing = false
+    displayArrayOfColors(customHueAccomplished)
+    timeout = setTimeout(() => { 
+        canva.innerHTML = ""
+        displayArrayOfColors(hue)
+        playing = true
+        selectedTiles = {"selection": null}
+        document.getElementById('countdown').innerHTML = "The scene is yours, switch the tiles ! <button id='end' onclick='giveUp()'>Give Up ?</button>"
+        document.getElementById("tip-button").disabled = false
+        document.getElementById("tip-button").onclick = () => {
+            showTip(LEVEL_USER)
+        }
+    }, 8000) // ICI LE COUNTDOWN
 }
