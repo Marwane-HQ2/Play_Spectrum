@@ -10,31 +10,81 @@
     </head>
 </head>
 <body>
-    <h1 id="title-game">Play <span class="instructions">Spectrum</span> !</h1>
-    
-    <div id="rules">
-        <h2><span class="instructions">Spectrum</span>: a game concept... </h2>
-        <p>How do you feel when colors <span class="instructions">match perfectly</span> on a beautiful gradient ? 
-            In this this game you must recreate a <span class="instructions">gradient</span> by moving tiles until everything looks great !
-            Follow your <span class="instructions">inner voice</span> and you will build a masterpiece !
-        </p>
-        <p>You need to <span class="instructions">move</span> the color tiles to <span class="instructions">recreate the spectrum</span>, you can move 
-            <span class="instructions">the tiles by clicking on the first tile you want to move and the tile to exchange spot with</span>
-            and once you are done a message should appear if you <span class="instructions">completed</span> the puzzle !</p>
-        <hr>
-        <p id="help">
-            <br>
-            <span class="instructions">Click</span> a button to choose a <span class="instructions">level
-        </p>
-    </div>
+    <div id="body">
+        <h1 id="title-game">Play <span class="instructions">Spectrum</span> !</h1>
+        
+        <div id="rules">
+            <h2><span class="instructions">Spectrum</span>: a game concept... </h2>
+            <p>How do you feel when colors <span class="instructions">match perfectly</span> on a beautiful gradient ? 
+                In this this game you must recreate a <span class="instructions">gradient</span> by moving tiles until everything looks great !
+                Follow your <span class="instructions">inner voice</span> and you will build a masterpiece !
+            </p>
+            <p>You need to <span class="instructions">move</span> the color tiles to <span class="instructions">recreate the spectrum</span>, you can move 
+                <span class="instructions">the tiles by clicking on the first tile you want to move and the tile to exchange spot with</span>
+                and once you are done a message should appear if you <span class="instructions">completed</span> the puzzle !</p>
+            <hr>
+            <p id="help">
+                <br>
+                <span class="instructions">Click</span> a button to choose a <span class="instructions">level</span>
+                or <span class="instructions" id="create-level" onclick="openCreateLevelWindow()">create your level</span>
+            </p>
+        </div>
 
-    <div id="button-level"></div>
+        <div id="levels-map">
+            <div id="button-level"></div>
+            <div id="button-custom-levels"></div>
+        </div>
+        
+    </div>
 
     <div id="window" style="display: none;">
         <div id="header-level">
             <p id="countdown">You have only <span class="instructions" id="seconds">8 seconds</span> to memorize the pattern <button id='end' onclick='giveUp()'>Give Up ?</button></p>
         </div>
         <div class="container" id="canva"></div>
+        <button id="tip-button" onclick="showTip()">tip ?</button>
     </div>
+
+    <div id="create-level-form" style="display: none;">
+        <div id="inputs-color">
+            <div class="palette">
+                <input type="color" id="c1" value="#ff0000">
+                <h1 id="c1-code">#ff0000</h1>
+                <p>Top left</p>
+              </div>
+              
+              <div class="palette">
+                <input type="color" id="c2" value="#00ff00">
+                <h1 id="c2-code">#00ff00</h1>
+                <p>Top right</p>
+              </div>
+              
+              <div class="palette">
+                <input type="color" id="c3" value="#0000ff">
+                <h1 id="c3-code">#0000ff</h1>
+                <p>Bottom left</p>
+              </div>
+              
+              <div class="palette">
+                <input type="color" id="c4" value="#ffffff">
+                <h1 id="c4-code">#ffffff</h1>
+                <p>Botton right</p>                
+              </div>
+        </div>
+        <div id="input-infos">
+            <div>
+                <label for="level-name">Give your level a name ! (2 car. max)</label>
+                <input type="text" id="level-name" placeholder="LV" maxlength="2">
+            </div>
+            <button onclick="createLevel()">Create</button>
+            <button onclick="document.getElementById('create-level-form').style.display = 'none'">EXIT</button>
+        </div>
+    </div>
+
+    <dialog id="tip">
+        <button id="close-dialog" onclick="document.getElementById('tip').close()">x</button>
+        <p id="tip-p"></p> 
+    </dialog>
+    <footer>Made with ❤ by <a href="https://github.com/Marwane-HQ2/Play_Spectrum">M_</a></footer>
     <script src="script.js"></script>
 </body>
