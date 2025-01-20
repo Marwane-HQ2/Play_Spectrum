@@ -8,9 +8,9 @@ This version offer a limited experience as there is only one level availible but
 Added 5 levels, corrected maths errors and hexa decoding strategy
 ### Version 3.0.0
 Changed design, added 5 more levels
-### Version 3.1.0 🔨
+### Version 3.1.0 
 Corrected maths bug and styling bug
-### License 📖
-This project is open source, feel free to edit, share and publish the code !
+### Version 3.2.0 🔨
+Added possibility to create new levels, worked on styles and corrected gradient strategy
 ## Play Spectrum 🎮
 You can play by using this [link](https://play-spectrum.vercel.app/) !
