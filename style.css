@@ -5,10 +5,12 @@
     --easy-bg: linear-gradient(to right bottom, #44aa44, #44aaef);
     --medium-bg: linear-gradient(to right bottom, #aaaa00, #aa8200);
     --hard-bg: linear-gradient(to right bottom, #aa4444, #aa44ef);
+    --custom-bg: linear-gradient(to right bottom, #4496aa, #aa44ef);
 
     --black: rgb(20, 20, 20);
     --window-color: #111111;
     --white: #FFFFFF;
+    --grey: #1d1d1d;
 
     --orbitron: "Orbitron", sans-serif;
 }
@@ -18,10 +20,14 @@ body {
     font-family: var(--orbitron);
     background-color: var(--black);
     color: var(--white);
+}
+
+#body {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-areas: "title title"
-    "rules levels";
+    "rules levels"
+    "footer footer";
 }
 
 #title-game {
@@ -72,7 +78,7 @@ h1 {
 
     position: absolute;
     left: 50%;
-    top: 30%;
+    top: 50%;
     transform: translate(-50%, -50%);
 
     text-align: center;
@@ -84,7 +90,7 @@ h1 {
     box-shadow: #7e7e7e 0 0 100vh;
 }
 
-#countdown button {
+#window button {
     width: fit-content;
     height: fit-content;
     padding: 2px;
@@ -96,6 +102,10 @@ h1 {
     background-image: var(--highlight-mask);
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+#window > button {
+    margin: 9px 0px;
 }
 
 .container {
@@ -122,7 +132,7 @@ h1 {
     transform: none;
 }
 
-#button-level {
+#button-level, #button-custom-levels {
     grid-area: levels;
 
     align-items: center;
@@ -133,7 +143,7 @@ h1 {
     justify-content: center;
 }
 
-#button-level button {
+#button-level button, #button-custom-levels button {
     width: 15%;
 }
 
@@ -186,6 +196,12 @@ button:disabled:hover {
     -webkit-text-fill-color: transparent;
 }
 
+.custom {
+    background-image: var(--custom-bg);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 #coming-soon {
     font-size: 1rem;
     background-color: var(--window-color);
@@ -194,4 +210,130 @@ button:disabled:hover {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 
+}
+dialog {
+    background-color: var(--window-color);
+    color: var(--white);
+}
+
+#close-dialog {
+    background-image: var(--highlight-mask);
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 1rem;
+    padding: 4px;
+}
+
+footer {
+    grid-area: footer;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+a {
+    color: var(--white);
+}
+
+a:hover {
+    color: var(--grey);
+}
+
+a:visited {
+    color: var(--white);
+}
+
+#create-level {
+    text-decoration: underline solid var(--white);
+}
+#create-level:hover {
+    cursor: pointer;
+}
+
+#create-level-form {
+    width: fit-content;
+    height: fit-content;
+}
+
+#inputs-color {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.palette {
+    margin: 0 2rem;
+    width: 160px;
+}
+
+.palette h1 {
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.palette p {
+    font-size: 0.8rem;
+}
+
+input[type="color"] {
+    appearance: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    width: 80px;
+    height: 80px;
+}
+
+input[type="color"]:hover {
+    cursor: pointer;
+    transform: scale(105%);
+}
+
+input[type="color"]:disabled {
+    opacity: 20%;
+}
+
+input[type="color"]:disabled:hover {
+    cursor: not-allowed;
+    transform: none;
+}
+
+input[type="text"] {
+    background-color: var(--window-color);
+    border: none;
+    padding: 8px;
+    margin: 0 0 0 8px;
+    color: var(--white);
+}
+
+#input-infos {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#input-infos button {
+    width: fit-content;
+    height: fit-content;
+    padding: 2px;
+    font-size: 1rem;
+    font-family: var(--orbitron);
+
+    background-color: var(--window-color);
+
+    background-image: var(--highlight-mask);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    margin: auto;
+}
+
+#create-level-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--grey);
+    border: var(--white) solid 4px;
+    border-radius: 12px;
+    padding: 20px;
 }
