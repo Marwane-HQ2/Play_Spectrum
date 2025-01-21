@@ -20,6 +20,7 @@ body {
     font-family: var(--orbitron);
     background-color: var(--black);
     color: var(--white);
+    height: fit-content;
 }
 
 #body {
@@ -27,7 +28,6 @@ body {
     grid-template-columns: 50% 50%;
     grid-template-areas: "title title"
     "rules levels"
-    "footer footer";
 }
 
 #title-game {
@@ -36,6 +36,10 @@ body {
 
 #rules {
     grid-area: rules;
+}
+
+#levels-map {
+    grid-area: levels;
 }
 
 * {
@@ -72,6 +76,48 @@ h1 {
 
 }
 
+#level-maps > div {
+    margin: 2px 0;
+}
+
+#levels-map #button-level {
+    min-height: 33%;
+    max-height: 60%;
+    overflow-y: scroll;
+}
+
+#levels-map #button-custom-levels {
+    min-height: 33%;
+    max-height: 40%;
+    overflow-y: scroll;
+
+}
+
+#levels-map #mini-games {
+    min-height: 33%;
+    max-height: 40%;
+    overflow-y: scroll;
+
+}
+
+
+/* PBLM
+genre la barre elle a dispary mais on peut toujours descendre */
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--white);
+}
+
+::-webkit-scrollbar-track {
+    width: 8px;
+    background: var(--window-color);
+}
+
+::-webkit-scrollbar-thumb {
+    width: 8px;
+    background: var(--grey);
+}
+
 #window {
     width: fit-content;
     height: fit-content;
@@ -80,6 +126,8 @@ h1 {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+
+    margin: 32px 0;
 
     text-align: center;
     align-items: center;
@@ -111,8 +159,9 @@ h1 {
 .container {
     display: flex;
     height: fit-content;
-    width: 100vh;
+    width: fit-content;
     justify-content: center;
+    margin: auto;
 }
 .sub {
     flex: 1;
@@ -122,6 +171,7 @@ h1 {
 .colorTiles {
     flex: 1;
     height: 50px;
+    user-select: none;
 }
 .colorTiles:hover {
     transform: scale(110%);
@@ -163,6 +213,9 @@ button {
 
     margin: 1rem 0.5rem 0;
     color: var(--white);
+
+    user-select: none;
+
 }
 
 button:hover {
@@ -222,12 +275,15 @@ dialog {
     border-radius: 50%;
     font-size: 1rem;
     padding: 4px;
+    width: 24px;
+    height: 24px;
 }
 
 footer {
-    grid-area: footer;
     text-align: center;
     font-size: 1.4rem;
+    user-select: none;
+
 }
 
 a {
@@ -252,6 +308,8 @@ a:visited {
 #create-level-form {
     width: fit-content;
     height: fit-content;
+    box-shadow: #7e7e7e 0 0 100vh;
+
 }
 
 #inputs-color {
@@ -327,6 +385,33 @@ input[type="text"] {
     margin: auto;
 }
 
+#input-infos > div > div {
+    padding: 4px;
+    display: flex;
+}
+
+#input-infos input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+
+    border: 0.1rem solid var(--white);
+    border-radius: 1rem;
+    padding: 8px;
+    margin-left: 16px;
+    background-color: var(--window-color);
+
+    align-items: baseline;
+}
+
+#input-infos input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width:  10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--white);
+}
+
 #create-level-form {
     position: absolute;
     top: 50%;
@@ -336,4 +421,35 @@ input[type="text"] {
     border: var(--white) solid 4px;
     border-radius: 12px;
     padding: 20px;
+}
+
+img {
+    background-image: var(--highlight-mask);
+    border-radius: 50%;
+    user-select: none
+}
+
+img:hover {
+    cursor: pointer;
+}
+
+#settings-dialog {
+    width: fit-content;
+}
+
+#settings-img {
+    position: absolute;
+    top: 5%;
+    left: 2%;
+    width: 40px;
+}
+
+#settings-set {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+#settings-set > div {
+    margin: 0 12px;
 }
