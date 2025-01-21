@@ -16,18 +16,33 @@ function isCompleted () {
     for (let e=0; e<listColorTiles.length; e++) {
         if (listColorTiles[e].id != "#" + listColorTilesCompleted[e]) {
             z = false
-        }        
+        }
+        else {
+            if (blockingTile) {
+                listColorTiles[e].classList.add("blocked")
+            }
+        }
+         
+    }
+    let y = false
+    if (customHueAccomplished) {
+        y = true
+        for (let a of customHueAccomplished) {
+        listColorTilesCompleted = listColorTilesCompleted.concat(a)
+        }
+        for (let e=0; e<listColorTiles.length; e++) {
+            if (listColorTiles[e].id != "#" + listColorTilesCompleted[e]) {
+                return false
+            }
+            else {
+                if (blockingTile) {
+                    listColorTiles[e].classList.add("blocked")
+                }
+            }       
+        }
     }
     
-    for (let a of customHueAccomplished) {
-        listColorTilesCompleted = listColorTilesCompleted.concat(a)
-    }
-    for (let e=0; e<listColorTiles.length; e++) {
-        if (listColorTiles[e].id != "#" + listColorTilesCompleted[e]) {
-            return false
-        }        
-    }
-    return z || true
+    return z || y
 
 }
 
@@ -41,6 +56,9 @@ function createTile (color, idP, blockedTile = false) {
     let newTile = document.createElement('div')
     newTile.classList.add(`colorTiles`)
     newTile.id = color
+    if (!hexCodesActive) {
+        newTile.style.color = color
+    }
     newTile.textContent = color
     newTile.style.backgroundColor = color
 
@@ -50,8 +68,10 @@ function createTile (color, idP, blockedTile = false) {
             if (!playing) {return}
             
             if (selectedTiles["selection"] === null) {
+                if (event.target.classList.contains("blocked")) {return}
                 selectedTiles["selection"] = newTile.id.slice(1)
             } else {
+                if (event.target.classList.contains("blocked")) {return}
                 let s = selectedTiles["selection"]
                 let e = event.target.id.slice(1)
                 
@@ -165,7 +185,7 @@ function generateGradient (c1, c2, n) {
     */
     let color1 = c1
     let color2 = c2
-    let nbInterColors = n + 1
+    let nbInterColors = n -1
 
     if (color1.length != 6)  {return}
     if (color2.length != 6)  {return}
@@ -261,7 +281,7 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
     let color2 = c2
     let color3 = c3
     let color4 = c4
-    let len = l+2
+    let len = l
 
     let arrayColors = []
 
@@ -286,7 +306,7 @@ function generateArrayOfColors (c1, c2, c3, c4, l) {
 
     if (true) { // Colonnes et lignes mutées
         let temp = []
-        for (let e=0; e<arrayColors.length+2; e++) {
+        for (let e=0; e<arrayColors.length; e++) {
             temp.push([])
             for (a of arrayColors) {
                 temp[e].push(a[e])
@@ -349,54 +369,125 @@ const LEVELS = {
     "1": {
         "colors": ["FF0000", "0000FF", "00FF00", "000000"],
         "difficulty": "easy",
-        "tip": "Green colors can be tricky ! Convert HEX codes to decimal and sort them."
+        "tip": "Green colors can be tricky ! Convert HEX codes to decimal and sort them.",
+        "length": 3
     }, 
     "2": {
         "colors": ["358600", "75F6FF", "8377D1", "FFFFFF"],
         "difficulty": "medium",
-        "tip": "Maybe focus on edges and then complete the center."
+        "tip": "Maybe focus on edges and then complete the center.",
+        "length": 4
     },
     "3": {
         "colors": ["247BA0", "C3B299", "596F43", "50514F"],
         "difficulty": "medium",
-        "tip": "Center colors are similar so look for similar HEX codes."
+        "tip": "Center colors are similar so look for similar HEX codes.",
+        "length": 4
     }, 
     "4": {
         "colors": ["B39C4D", "34623F", "9A6D38", "CC3F0C"],
         "difficulty": "hard",
-        "tip": "Put green, yellow, brown and orange colors in a distinct way, then sort them."
+        "tip": "Put green, yellow, brown and orange colors in a distinct way, then sort them.",
+        "length": 5
     },
     "5": {
         "colors": ["373D20", "717744", "BCBD8B", "766153"],
         "difficulty": "hard",
-        "tip": "Figure out all alone !"
+        "tip": "Figure out all alone !",
+        "length": 5
     },
     "6": {
         "colors": ["FFA600", "000000", "FFFFFF", "0000A5"],
         "difficulty": "easy",
-        "tip": "The four colors on the corners have very high contrast, use this to help you"
+        "tip": "The four colors on the corners have very high contrast, use this to help you",
+        "length": 5
     },
     "7": {
         "colors": ["0059FF", "FFEF00", "08A04B", "E41B17"],
         "difficulty": "medium",
-        "tip": "Focus on first and last column first"
+        "tip": "Focus on first and last column first",
+        "length": 5
     },
 
     "8": {
         "colors": ["7D0552", "FDEEF4", "EB5406", "36013F"],
         "difficulty": "medium",
-        "tip": "Brighter colors are closer to the top right corner"
+        "tip": "Brighter colors are closer to the top right corner",
+        "length": 6
     },
     "9": {
         "colors": ["98FF98", "E42217", "967BB6", "848B79"],
         "difficulty": "hard",
-        "tip": "Use HEX codes to sort colors"
+        "tip": "Use HEX codes to sort colors",
+        "length": 5
     },
+    // AI Generated LEVELS
     "10": {
         "colors": ["FD1C03", "00CED1", "1569C7", "E78A61"],
         "difficulty": "hard",
-        "tip": "Center colors have their 3 first caracters in common, use this to place them"
+        "tip": "Center colors have their 3 first caracters in common, use this to place them",
+        "length": 6
     },
+    "11": {
+        "colors": ["8B008B", "FFD700", "00FF7F", "1E90FF"],
+        "difficulty": "medium",
+        "tip": "Look for bright colors and focus on those that repeat",
+        "length": 5
+    },
+    "12": {
+        "colors": ["D2691E", "F0E68C", "ADFF2F", "B22222"],
+        "difficulty": "easy",
+        "tip": "Lighter colors are easier to distinguish, start with them",
+        "length": 4
+    },
+    "13": {
+        "colors": ["00008B", "DC143C", "FF6347", "FFD700"],
+        "difficulty": "hard",
+        "tip": "Use color intensity to spot the right placements",
+        "length": 6
+    },
+    "14": {
+        "colors": ["FF4500", "8A2BE2", "32CD32", "8B0000"],
+        "difficulty": "medium",
+        "tip": "Try sorting colors from lightest to darkest",
+        "length": 5
+    },
+    "15": {
+        "colors": ["A52A2A", "D3D3D3", "F0FFFF", "98FB98"],
+        "difficulty": "hard",
+        "tip": "Compare HEX codes to identify similar colors",
+        "length": 5
+    },
+    "16": {
+        "colors": ["FF1493", "00FF00", "0000CD", "FF8C00"],
+        "difficulty": "easy",
+        "tip": "Strong contrasts will guide you to the right positions",
+        "length": 4
+    },
+    "17": {
+        "colors": ["C71585", "20B2AA", "7FFF00", "4682B4"],
+        "difficulty": "medium",
+        "tip": "Pay attention to color saturation to organize them",
+        "length": 6
+    },
+    "18": {
+        "colors": ["800000", "FFFF00", "40E0D0", "228B22"],
+        "difficulty": "hard",
+        "tip": "Look at color relationships on the color wheel to help you",
+        "length": 5
+    },
+    "19": {
+        "colors": ["D8BFD8", "F4A300", "008080", "F5FFFA"],
+        "difficulty": "medium",
+        "tip": "Pastel colors are often easier to differentiate",
+        "length": 5
+    },
+    "20": {
+        "colors": ["800080", "FF6347", "FFD700", "228B22"],
+        "difficulty": "hard",
+        "tip": "Warm colors tend to group together",
+        "length": 6
+    }
 }
 
 let levelMap = document.getElementById("button-level")
@@ -448,7 +539,7 @@ function play(level="1") {
         document.getElementById("seconds").innerHTML = `${temps} seconds`
     }, 990 )
 
-    hueAccomplished = generateArrayOfColors(LEVELS[level]["colors"][0], LEVELS[level]["colors"][1], LEVELS[level]["colors"][2], LEVELS[level]["colors"][3], 1)
+    hueAccomplished = generateArrayOfColors(LEVELS[level]["colors"][0], LEVELS[level]["colors"][1], LEVELS[level]["colors"][2], LEVELS[level]["colors"][3], LEVELS[level]["length"])
 
     let hue = []
     for (let a=0; a<hueAccomplished.length ; a++) {
@@ -494,10 +585,13 @@ function ableLevelButton() {
 }
 
 function showTip(levelBase) {
-    let tipDialog = document.getElementById('tip')
-    let tip = levelBase[document.getElementById("window").dataset.level]["tip"]
-    document.getElementById("tip-p").innerHTML = tip
-    tipDialog.showModal()
+    if (tipsActive)  {
+        let tipDialog = document.getElementById('tip')
+        let tip = levelBase[document.getElementById("window").dataset.level]["tip"]
+        document.getElementById("tip-p").innerHTML = tip
+        tipDialog.showModal()
+    }
+    else {return}
 }
 
 // ----------------------- CSS ----------------------- //
@@ -525,6 +619,8 @@ let allColorLists = [
 ]
 
 let levelNameInput = document.getElementById('level-name')
+let levelNbTilesInput = document.getElementById("level-length")
+let levelNbTiles = document.getElementById("nb-tiles")
 
 function addColorEventListenner() {
     for (let a of allColorLists) {
@@ -535,6 +631,12 @@ function addColorEventListenner() {
             a[0].innerHTML = a[1].value
         })
     }
+    levelNbTilesInput.addEventListener("input", () => {
+        levelNbTiles.innerHTML = levelNbTilesInput.value
+    })
+    levelNbTilesInput.addEventListener("change", () => {
+        levelNbTiles.innerHTML = levelNbTilesInput.value
+    })
 }
 
 addColorEventListenner()
@@ -549,7 +651,8 @@ function createLevel() {
     LEVEL_USER[levelNameInput.value] = {
         "colors": [c1Input.value.slice(1).toUpperCase(), c2Input.value.slice(1).toUpperCase(), c3Input.value.slice(1).toUpperCase(), c4Input.value.slice(1).toUpperCase()],
         "difficulty" : "custom",
-        "tip": "You created this level ! Enjoy !"
+        "tip": "You created this level ! Enjoy !",
+        "length": levelNbTilesInput.value
     }
     createCustomLevelMap()
     document.getElementById('create-level-form').style.display = "none"
@@ -608,7 +711,7 @@ function playCustom(level) {
     }, 990 )
 
 
-    customHueAccomplished = generateArrayOfColors(LEVEL_USER[level]["colors"][0], LEVEL_USER[level]["colors"][1], LEVEL_USER[level]["colors"][2], LEVEL_USER[level]["colors"][3], 1)
+    customHueAccomplished = generateArrayOfColors(LEVEL_USER[level]["colors"][0], LEVEL_USER[level]["colors"][1], LEVEL_USER[level]["colors"][2], LEVEL_USER[level]["colors"][3], LEVEL_USER[level]["length"])
     let hue = []
 
     for (let a=0; a<customHueAccomplished.length ; a++) {
@@ -628,4 +731,56 @@ function playCustom(level) {
             showTip(LEVEL_USER)
         }
     }, 8000) // ICI LE COUNTDOWN
+}
+
+let tipsActive = true
+let hexCodesActive = true
+let blockingTile = false
+
+function disableTips (e) {
+    e.src = "assets/bulb_off.png"
+    e.alt = "off"
+    e.title = "Tips are disabled"
+    e.onclick = () => {ableTips(e)}
+    tipsActive = false
+}
+
+function ableTips (e) {
+    e.src = "assets/bulb_on.png"
+    e.alt = "on"
+    e.title = "Tips are enabled"
+    e.onclick = () => {disableTips(e)}
+    tipsActive = true
+}
+
+function disableHexCodes (e) {
+    e.src = "assets/cross.png"
+    e.alt = "off"
+    e.title = "Hex codes are not displayed"
+    e.onclick = () => {ableHexCodes(e)}
+    hexCodesActive = false
+}
+
+function ableHexCodes (e) {
+    e.src = "assets/hash.png"
+    e.alt = "on"
+    e.title = "Hex codes are displayed"
+    e.onclick = () => {disableHexCodes(e)}
+    hexCodesActive = true
+}
+
+function disableBlockTiles(e) {
+    e.src = "assets/unlock.png"
+    e.alt = "off"
+    e.title = "Tiles are not blocked when on the right spot"
+    e.onclick = () => {ableBlockTiles(e)}
+    blockingTile = false
+}
+
+function ableBlockTiles(e) {
+    e.src = "assets/lock.png"
+    e.alt = "on"
+    e.title = "Tiles are blocked when on the right spot"
+    e.onclick = () => {disableBlockTiles(e)}
+    blockingTile = true
 }
