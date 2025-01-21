@@ -10,7 +10,12 @@ Added 5 levels, corrected maths errors and hexa decoding strategy
 Changed design, added 5 more levels
 ### Version 3.1.0 
 Corrected maths bug and styling bug
-### Version 3.2.0 🔨
+### Version 3.2.0 
 Added possibility to create new levels, worked on styles and corrected gradient strategy
+### Version 4.0.0 🔨
+Added settings: possibility to disable tips, to disable HEX codes, and block tiles when on the right spot,
+Added 10 more levels,
+Added possibility to choose the size of the hue when creating a level and changed some level sizes.
+Corrected style bugs and gradient strategy.
 ## Play Spectrum 🎮
 You can play by using this [link](https://play-spectrum.vercel.app/) !
