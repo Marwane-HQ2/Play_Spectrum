@@ -12,7 +12,7 @@
 <body>
     <div id="body">
         <h1 id="title-game">Play <span class="instructions">Spectrum</span> !</h1>
-        
+        <img src="assets/settings.png" alt="settings" id="settings-img" onclick="document.getElementById('settings-dialog').showModal()">
         <div id="rules">
             <h2><span class="instructions">Spectrum</span>: a game concept... </h2>
             <p>How do you feel when colors <span class="instructions">match perfectly</span> on a beautiful gradient ? 
@@ -24,7 +24,6 @@
                 and once you are done a message should appear if you <span class="instructions">completed</span> the puzzle !</p>
             <hr>
             <p id="help">
-                <br>
                 <span class="instructions">Click</span> a button to choose a <span class="instructions">level</span>
                 or <span class="instructions" id="create-level" onclick="openCreateLevelWindow()">create your level</span>
             </p>
@@ -32,7 +31,8 @@
 
         <div id="levels-map">
             <div id="button-level"></div>
-            <div id="button-custom-levels"></div>
+            <br>
+            <div id="button-custom-levels">No custom levels... yet</div>
         </div>
         
     </div>
@@ -73,8 +73,15 @@
         </div>
         <div id="input-infos">
             <div>
-                <label for="level-name">Give your level a name ! (2 car. max)</label>
-                <input type="text" id="level-name" placeholder="LV" maxlength="2">
+                <div>
+                    <label for="level-name">Give your level a <span class="instructions">name</span> ! (2 car. max)</label>
+                    <input type="text" id="level-name" placeholder="LV" maxlength="2">
+                </div>
+                <div>
+                    <label for="level-length"> <span class="instructions" id="nb-tiles">7</span> <span class="instructions">tiles</span> per row/column</label>
+                    <input type="range" id="level-length" value="7" min="3" max="11">
+                </div>
+                
             </div>
             <button onclick="createLevel()">Create</button>
             <button onclick="document.getElementById('create-level-form').style.display = 'none'">EXIT</button>
@@ -82,9 +89,31 @@
     </div>
 
     <dialog id="tip">
-        <button id="close-dialog" onclick="document.getElementById('tip').close()">x</button>
+        <button id="close-dialog" onclick="document.getElementById('tip').close()"></button>
         <p id="tip-p"></p> 
     </dialog>
+
+    <dialog id="settings-dialog">
+        <button id="close-dialog" onclick="document.getElementById('settings-dialog').close()"></button>
+        <p>Set everything you want to set !</p>
+        <div id="settings-set">
+            <div>
+                <img src="assets/bulb_on.png" alt="on" title="Tips are enabled" onclick="disableTips(this)">
+                <p>Tips</p>
+            </div>
+            <div>
+                <img src="assets/hash.png" alt="on" title="Hex codes are displayed" onclick="disableHexCodes(this)">
+                <p>Hex codes</p>
+            </div>
+            <div>
+                <img src="assets/unlock.png" alt="off" title="Tiles are not blocked when on the right spot" onclick="ableBlockTiles(this)">
+                <p>Block sorted tiles</p>
+            </div>
+        </div> 
+    </dialog>
+
+    <dialog></dialog>
+
     <footer>Made with ❤ by <a href="https://github.com/Marwane-HQ2/Play_Spectrum">M_</a></footer>
     <script src="script.js"></script>
 </body>
